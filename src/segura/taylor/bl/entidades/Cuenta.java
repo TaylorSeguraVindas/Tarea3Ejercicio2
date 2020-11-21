@@ -1,23 +1,27 @@
 package segura.taylor.bl.entidades;
 
+import segura.taylor.bl.enums.EnumTipoCuenta;
+import segura.taylor.bl.interfaces.SerializableCSV;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public abstract class Cuenta {
+public abstract class Cuenta implements SerializableCSV {
     //Variables
-    protected int numeroCuenta;
+    protected EnumTipoCuenta tipoCuenta;
+    protected String numeroCuenta;
     protected LocalDate fechaApertura;
-    protected double minDepositoInicial;
     protected double saldo;
     protected double tasaInteres;
-    protected ArrayList<Movimiento> movimientos;
     protected Cliente duenno;
 
     //Propiedades
-    public int getNumeroCuenta() {
+    public EnumTipoCuenta getTipoCuenta() { return this.tipoCuenta; }
+
+    public String getNumeroCuenta() {
         return numeroCuenta;
     }
-    public void setNumeroCuenta(int numeroCuenta) {
+    public void setNumeroCuenta(String numeroCuenta) {
         this.numeroCuenta = numeroCuenta;
     }
 
@@ -26,13 +30,6 @@ public abstract class Cuenta {
     }
     public void setFechaApertura(LocalDate fechaApertura) {
         this.fechaApertura = fechaApertura;
-    }
-
-    public double getMinDepositoInicial() {
-        return minDepositoInicial;
-    }
-    public void setMinDepositoInicial(double minDepositoInicial) {
-        this.minDepositoInicial = minDepositoInicial;
     }
 
     public double getSaldo() {
@@ -49,13 +46,6 @@ public abstract class Cuenta {
         this.tasaInteres = tasaInteres;
     }
 
-    public ArrayList<Movimiento> getMovimientos() {
-        return movimientos;
-    }
-    public void setMovimientos(ArrayList<Movimiento> movimientos) {
-        this.movimientos = movimientos;
-    }
-
     public Cliente getDuenno() {
         return duenno;
     }
@@ -64,13 +54,13 @@ public abstract class Cuenta {
     }
 
     //Constructores
-    public Cuenta(int numeroCuenta, LocalDate fechaApertura, double minDepositoInicial, double saldo, double tasaInteres, ArrayList<Movimiento> movimientos, Cliente duenno) {
+    public Cuenta(){}
+    public Cuenta(String[] datos){}
+    public Cuenta(String numeroCuenta, LocalDate fechaApertura, double saldo, double tasaInteres, Cliente duenno) {
         this.numeroCuenta = numeroCuenta;
         this.fechaApertura = fechaApertura;
-        this.minDepositoInicial = minDepositoInicial;
         this.saldo = saldo;
         this.tasaInteres = tasaInteres;
-        this.movimientos = movimientos;
         this.duenno = duenno;
     }
 
@@ -80,10 +70,8 @@ public abstract class Cuenta {
         return "Cuenta{" +
                 "numeroCuenta=" + numeroCuenta +
                 ", fechaApertura=" + fechaApertura +
-                ", minDepositoInicial=" + minDepositoInicial +
                 ", saldo=" + saldo +
                 ", tasaInteres=" + tasaInteres +
-                ", movimientos=" + movimientos +
                 ", duenno=" + duenno +
                 '}';
     }

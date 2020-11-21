@@ -1,9 +1,15 @@
 package segura.taylor.bl.entidades;
 
+import segura.taylor.bl.enums.EnumTipoCuenta;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class CuentaAhorroProgramado extends Cuenta{
+    //Constantes
+    public static final double constTasaIntereses = 0.14;
+    public static final double constMinDepositoInicial = 0.0;
+
     //Variables
     private double montoDebito;
     private CuentaCorriente cuentaCorriente;
@@ -24,8 +30,20 @@ public class CuentaAhorroProgramado extends Cuenta{
     }
 
     //Constructores
-    public CuentaAhorroProgramado(int numeroCuenta, LocalDate fechaApertura, double minDepositoInicial, double saldo, double tasaInteres, ArrayList<Movimiento> movimientos, Cliente duenno, double montoDebito, CuentaCorriente cuentaCorriente) {
-        super(numeroCuenta, fechaApertura, minDepositoInicial, saldo, tasaInteres, movimientos, duenno);
+    public CuentaAhorroProgramado() {
+        this.tipoCuenta = EnumTipoCuenta.AHORRO_PROGRAMADO;
+    }
+    public CuentaAhorroProgramado(String[] datos) {
+        this.tipoCuenta = EnumTipoCuenta.AHORRO_PROGRAMADO;
+        this.numeroCuenta = datos[1];
+        this.fechaApertura = LocalDate.parse(datos[2]);
+        this.saldo = Double.parseDouble(datos[3]);
+        this.montoDebito = Double.parseDouble((datos[4]));
+    }
+    public CuentaAhorroProgramado(String numeroCuenta, LocalDate fechaApertura, double saldo, double montoDebito, Cliente duenno, CuentaCorriente cuentaCorriente) {
+        super(numeroCuenta, fechaApertura, saldo, CuentaAhorroProgramado.constTasaIntereses, duenno);
+        this.tipoCuenta = EnumTipoCuenta.AHORRO_PROGRAMADO;
+
         this.montoDebito = montoDebito;
         this.cuentaCorriente = cuentaCorriente;
     }
@@ -38,10 +56,8 @@ public class CuentaAhorroProgramado extends Cuenta{
                 ", cuentaCorriente=" + cuentaCorriente +
                 ", numeroCuenta=" + numeroCuenta +
                 ", fechaApertura=" + fechaApertura +
-                ", minDepositoInicial=" + minDepositoInicial +
                 ", saldo=" + saldo +
                 ", tasaInteres=" + tasaInteres +
-                ", movimientos=" + movimientos +
                 ", duenno=" + duenno +
                 '}';
     }
@@ -54,5 +70,17 @@ public class CuentaAhorroProgramado extends Cuenta{
     @Override
     public void registrarMovimiento(Movimiento pMovimiento) {
 
+    }
+
+    @Override
+    public String toCSV() {
+        String datos = this.tipoCuenta + "," +
+                this.numeroCuenta + "," +
+                this.fechaApertura.toString() + "," +
+                this.saldo + "," +
+                this.montoDebito + "," +
+                this.duenno.getId() + "," +
+                this.cuentaCorriente.getNumeroCuenta();
+        return datos;
     }
 }
