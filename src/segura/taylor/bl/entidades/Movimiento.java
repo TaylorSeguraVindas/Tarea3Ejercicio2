@@ -1,5 +1,7 @@
 package segura.taylor.bl.entidades;
 
+import segura.taylor.bl.enums.EnumTipoMovimiento;
+
 import java.time.LocalDate;
 
 public class Movimiento {

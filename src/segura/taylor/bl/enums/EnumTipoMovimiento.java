@@ -1,4 +1,4 @@
-package segura.taylor.bl.entidades;
+package segura.taylor.bl.enums;
 
 public enum EnumTipoMovimiento {
     RETIRO,
