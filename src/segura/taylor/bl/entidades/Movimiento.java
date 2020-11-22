@@ -84,6 +84,7 @@ public class Movimiento implements SerializableCSV {
                 ", fecha=" + fecha +
                 ", descripcion='" + descripcion + '\'' +
                 ", monto=" + monto +
+                ", cuenta=" + cuentaModificada.toString() +
                 '}';
     }
 

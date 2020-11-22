@@ -1,6 +1,7 @@
 package segura.taylor.bl.entidades;
 
 import segura.taylor.bl.enums.EnumTipoCuenta;
+import segura.taylor.bl.enums.EnumTipoMovimiento;
 import segura.taylor.bl.interfaces.SerializableCSV;
 
 import java.time.LocalDate;
@@ -77,5 +78,18 @@ public abstract class Cuenta implements SerializableCSV {
     }
 
     public abstract boolean puedeRealizarMovimiento(Movimiento pMovimiento);
-    public abstract void registrarMovimiento(Movimiento pMovimiento);
+
+    public void registrarMovimiento(Movimiento pMovimiento) throws Exception {
+        if (pMovimiento.getTipo().equals(EnumTipoMovimiento.DEPOSITO)) {
+            this.saldo += pMovimiento.getMonto();
+        }
+
+        if (pMovimiento.getTipo().equals(EnumTipoMovimiento.RETIRO)) {
+            if((this.saldo-pMovimiento.getMonto()) >= 0.0) {
+                this.saldo -= pMovimiento.getMonto();
+            } else {
+                throw new Exception("No hay suficiente saldo en la cuenta para realizar el retiro");
+            }
+        }
+    }
 }

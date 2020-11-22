@@ -55,7 +55,7 @@ public class CuentaFAO {
                     result.add(currentLine);
 
                     //Guardar el indice de la cuenta que se va a modificar
-                    if(datos[0].equals(cuentaModificar.getNumeroCuenta())) {
+                    if(datos[1].equals(cuentaModificar.getNumeroCuenta())) {
                         indiceCuenta = cont;
                     }
 

@@ -1,8 +1,10 @@
 package segura.taylor.bl.entidades;
 
 import segura.taylor.bl.enums.EnumTipoCuenta;
+import segura.taylor.bl.enums.EnumTipoMovimiento;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 
 public class CuentaAhorroProgramado extends Cuenta{
@@ -64,12 +66,15 @@ public class CuentaAhorroProgramado extends Cuenta{
 
     @Override
     public boolean puedeRealizarMovimiento(Movimiento pMovimiento) {
-        return false;
-    }
+        if(pMovimiento.getTipo().equals(EnumTipoMovimiento.RETIRO)) {
+            //Solo se puede retirar si ha pasado un año desde la fecha en que se creó.
+            LocalDate fechaActual = LocalDate.now();
+            int annos = Period.between(this.fechaApertura, fechaActual).getYears();
 
-    @Override
-    public void registrarMovimiento(Movimiento pMovimiento) {
+            return (annos > 1);
+        }
 
+        return true;
     }
 
     @Override

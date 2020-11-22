@@ -1,6 +1,7 @@
 package segura.taylor.bl.entidades;
 
 import segura.taylor.bl.enums.EnumTipoCuenta;
+import segura.taylor.bl.enums.EnumTipoMovimiento;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -33,12 +34,7 @@ public class CuentaCorriente extends Cuenta {
 
     @Override
     public boolean puedeRealizarMovimiento(Movimiento pMovimiento) {
-        return false;
-    }
-
-    @Override
-    public void registrarMovimiento(Movimiento pMovimiento) {
-
+        return true;
     }
 
     @Override

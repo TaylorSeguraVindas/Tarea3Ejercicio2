@@ -143,6 +143,10 @@ public class Controlador {
             case 1:
                 CuentaCorriente cuentaCorriente = new CuentaCorriente(numeroCuenta, fechaApertura, 0.0, duenno);
                 resultado = gestorCuentas.guardarcuenta(cuentaCorriente);
+
+                if(resultado) {
+                    registrarMovimiento(cuentaCorriente);
+                }
                 break;
             case 2:
                 CuentaAhorro cuentaAhorro = new CuentaAhorro(numeroCuenta, fechaApertura, 0.0, duenno);
@@ -160,7 +164,7 @@ public class Controlador {
 
                 CuentaCorriente cuentaCorrienteObjetivo = (CuentaCorriente) cuentaCorrienteEncontrada.get();
 
-                ui.imprimir("Monto debido: ");
+                ui.imprimir("Monto debito: ");
                 double montoDebito = ui.leerDouble();
 
                 CuentaAhorroProgramado cuentaAhorroProgramado = new CuentaAhorroProgramado(numeroCuenta, fechaApertura, 0.0, montoDebito, duenno, cuentaCorrienteObjetivo);
@@ -182,6 +186,7 @@ public class Controlador {
         }
     }
 
+    //Normal
     private void registrarMovimiento() {
         //Cuenta
         Optional<Cuenta> cuentaCorrienteEncontrada;
@@ -193,7 +198,7 @@ public class Controlador {
         } while (!cuentaCorrienteEncontrada.isPresent());
         Cuenta cuentaModificar = cuentaCorrienteEncontrada.get();
 
-        ui.imprimir("ID: ");
+        ui.imprimir("ID movimiento: ");
         String id = ui.leerLinea();
 
         //Tipo
@@ -233,17 +238,61 @@ public class Controlador {
 
         if(cuentaModificar.puedeRealizarMovimiento(nuevoMovimiento)) {
             //Modificar datos en la instancia
-            cuentaModificar.registrarMovimiento(nuevoMovimiento);
+            try {
+                cuentaModificar.registrarMovimiento(nuevoMovimiento);
 
-            //Actualizar datos de la cuenta en el archivo.
-            boolean actualizado = gestorCuentas.modificarCuenta(cuentaModificar);
+                //Actualizar datos de la cuenta en el archivo.
+                boolean actualizado = gestorCuentas.modificarCuenta(cuentaModificar);
 
-            if(actualizado) {
-                //Guardar el movimiento en archivo
-                gestorMovimientos.guardarMovimiento(nuevoMovimiento);
-                ui.imprimirLinea("Movimiento exitoso");
-            } else {
-                ui.imprimirLinea("Ocurrió un problema al registrar el movimiento");
+                if (actualizado) {
+                    //Guardar el movimiento en archivo
+                    gestorMovimientos.guardarMovimiento(nuevoMovimiento);
+                    ui.imprimirLinea("Movimiento exitoso");
+                } else {
+                    ui.imprimirLinea("Ocurrió un problema al registrar el movimiento");
+                }
+            } catch (Exception e) {
+                ui.imprimirLinea(e.getMessage());
+            }
+        } else {
+            ui.imprimirLinea("No se puede realizar el movimiento");
+        }
+    }
+    //Primer movimiento cuenta corriente
+    private void registrarMovimiento(Cuenta cuentaModificar) {
+        ui.imprimirLinea("Deposito inicial. Debe ser 50mil colones.");
+        //Info
+        ui.imprimir("ID movimiento: ");
+        String id = ui.leerLinea();
+        ui.imprimir("Monto: ");
+        double monto = ui.leerDouble();
+
+        //Tipo
+        EnumTipoMovimiento tipo = EnumTipoMovimiento.DEPOSITO;
+        String descripcion = "Deposito inicial";
+
+        LocalDate fecha = LocalDate.now();
+
+        //Realizar movimiento
+        Movimiento nuevoMovimiento = new Movimiento(id, tipo, fecha, descripcion, monto, cuentaModificar);
+
+        if (cuentaModificar.puedeRealizarMovimiento(nuevoMovimiento)) {
+            //Modificar datos en la instancia
+            try {
+                cuentaModificar.registrarMovimiento(nuevoMovimiento);
+
+                //Actualizar datos de la cuenta en el archivo.
+                boolean actualizado = gestorCuentas.modificarCuenta(cuentaModificar);
+
+                if (actualizado) {
+                    //Guardar el movimiento en archivo
+                    gestorMovimientos.guardarMovimiento(nuevoMovimiento);
+                    ui.imprimirLinea("Movimiento exitoso");
+                } else {
+                    ui.imprimirLinea("Ocurrió un problema al registrar el movimiento");
+                }
+            } catch (Exception e) {
+                ui.imprimirLinea(e.getMessage());
             }
         } else {
             ui.imprimirLinea("No se puede realizar el movimiento");

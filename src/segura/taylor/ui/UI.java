@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class UI {
     private PrintStream output = new PrintStream(System.out);
-    private Scanner input = new Scanner(System.in);
+    private Scanner input = new Scanner(System.in).useDelimiter("\\n");
 
     public void imprimir(String mensaje) {
         System.out.print(mensaje);

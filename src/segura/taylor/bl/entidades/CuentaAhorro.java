@@ -1,6 +1,7 @@
 package segura.taylor.bl.entidades;
 
 import segura.taylor.bl.enums.EnumTipoCuenta;
+import segura.taylor.bl.enums.EnumTipoMovimiento;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class CuentaAhorro extends Cuenta{
         this.tasaInteres = CuentaAhorro.constTasaIntereses;
     }
     public CuentaAhorro(String[] datos){
-        this.tipoCuenta = EnumTipoCuenta.CORRIENTE;
+        this.tipoCuenta = EnumTipoCuenta.AHORRO;
         this.numeroCuenta = datos[1];
         this.fechaApertura = LocalDate.parse(datos[2]);
         this.saldo = Double.parseDouble(datos[3]);
@@ -45,11 +46,12 @@ public class CuentaAhorro extends Cuenta{
 
     @Override
     public boolean puedeRealizarMovimiento(Movimiento pMovimiento) {
-        return false;
-    }
-    @Override
-    public void registrarMovimiento(Movimiento pMovimiento) {
+        if(pMovimiento.getTipo().equals(EnumTipoMovimiento.RETIRO)) {
+            //Solo se puede retirar si el monto es mayor a 100mil y menor al 50% del saldo
+            return (pMovimiento.getMonto() > 100000 && pMovimiento.getMonto() < (this.saldo * 0.5));
+        }
 
+        return true;
     }
 
     @Override
