@@ -2,8 +2,10 @@ package segura.taylor.controlador;
 
 import segura.taylor.bl.entidades.*;
 import segura.taylor.bl.enums.EnumTipoCuenta;
+import segura.taylor.bl.enums.EnumTipoMovimiento;
 import segura.taylor.bl.gestor.GestorClientes;
 import segura.taylor.bl.gestor.GestorCuentas;
+import segura.taylor.bl.gestor.GestorMovimientos;
 import segura.taylor.ui.UI;
 
 import java.time.LocalDate;
@@ -14,6 +16,7 @@ import java.util.Optional;
 public class Controlador {
     GestorClientes gestorClientes = new GestorClientes();
     GestorCuentas gestorCuentas = new GestorCuentas();
+    GestorMovimientos gestorMovimientos = new GestorMovimientos();
 
     UI ui = new UI();
 
@@ -59,8 +62,10 @@ public class Controlador {
                 listarCuentas();
                 break;
             case 5:
+                registrarMovimiento();
                 break;
             case 6:
+                listarMovimientos();
                 break;
             case 7:
                 ui.imprimirLinea("Adios");
@@ -71,8 +76,7 @@ public class Controlador {
         }
     }
 
-    private void registrarCliente()
-    {
+    private void registrarCliente() {
         ui.imprimirLinea("Id: ");
         String id = ui.leerLinea();
         ui.imprimirLinea("Nombre: ");
@@ -88,7 +92,6 @@ public class Controlador {
             ui.imprimirLinea("Ya existe un cliente con el id especificado");
         }
     }
-
     private void listarClientes() {
         List<Cliente> clientes = gestorClientes.listarClientes();
 
@@ -171,12 +174,85 @@ public class Controlador {
             ui.imprimirLinea("Ocurrió un error al registrar la cuenta");
         }
     }
-
     private void listarCuentas() {
         List<Cuenta> cuentas = gestorCuentas.listarCuentas();
 
         for (Cuenta cuenta : cuentas) {
             ui.imprimirLinea(cuenta.toString());
+        }
+    }
+
+    private void registrarMovimiento() {
+        //Cuenta
+        Optional<Cuenta> cuentaCorrienteEncontrada;
+        do {
+            listarCuentas();
+            ui.imprimir("Numero de la cuenta: ");
+            String idCuentaCorriente = ui.leerLinea();
+            cuentaCorrienteEncontrada = gestorCuentas.buscarPorId(idCuentaCorriente);
+        } while (!cuentaCorrienteEncontrada.isPresent());
+        Cuenta cuentaModificar = cuentaCorrienteEncontrada.get();
+
+        ui.imprimir("ID: ");
+        String id = ui.leerLinea();
+
+        //Tipo
+        int opcionTipo;
+        do {
+            ui.imprimirLinea("Seleccione el tipo de movimiento");
+            ui.imprimirLinea("1. Deposito");
+            ui.imprimirLinea("2. Retiro");
+            ui.imprimir("Su opcion: ");
+            opcionTipo = ui.leerEntero();
+
+            if (opcionTipo < 0 || opcionTipo > 2) {
+                ui.imprimirLinea("\n\nOpcion invalida");
+            }
+        } while (opcionTipo < 0 || opcionTipo > 2);
+
+        EnumTipoMovimiento tipo = EnumTipoMovimiento.DEPOSITO;
+        switch (opcionTipo) {
+            case 1:
+                tipo = EnumTipoMovimiento.DEPOSITO;
+                break;
+            case 2:
+                tipo = EnumTipoMovimiento.RETIRO;
+                break;
+        }
+
+        //Info
+        ui.imprimir("Monto: ");
+        double monto = ui.leerDouble();
+        ui.imprimir("Descripcion: ");
+        String descripcion = ui.leerLinea();
+
+        LocalDate fecha = LocalDate.now();
+
+        //Realizar movimiento
+        Movimiento nuevoMovimiento = new Movimiento(id, tipo, fecha, descripcion, monto, cuentaModificar);
+
+        if(cuentaModificar.puedeRealizarMovimiento(nuevoMovimiento)) {
+            //Modificar datos en la instancia
+            cuentaModificar.registrarMovimiento(nuevoMovimiento);
+
+            //Actualizar datos de la cuenta en el archivo.
+            boolean actualizado = gestorCuentas.modificarCuenta(cuentaModificar);
+
+            if(actualizado) {
+                //Guardar el movimiento en archivo
+                gestorMovimientos.guardarMovimiento(nuevoMovimiento);
+                ui.imprimirLinea("Movimiento exitoso");
+            } else {
+                ui.imprimirLinea("Ocurrió un problema al registrar el movimiento");
+            }
+        } else {
+            ui.imprimirLinea("No se puede realizar el movimiento");
+        }
+    }
+    private void listarMovimientos() {
+        List<Movimiento> movimientos = gestorMovimientos.listarMovimientos();
+        for (Movimiento movimiento : movimientos) {
+            ui.imprimirLinea(movimiento.toString());
         }
     }
 }

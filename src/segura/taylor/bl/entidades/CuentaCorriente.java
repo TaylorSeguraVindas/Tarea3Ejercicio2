@@ -44,8 +44,7 @@ public class CuentaCorriente extends Cuenta {
     @Override
     public String toString() {
         return "CuentaCorriente{" +
-                "tipoCuenta=" + tipoCuenta +
-                ", numeroCuenta='" + numeroCuenta + '\'' +
+                "numeroCuenta='" + numeroCuenta + '\'' +
                 ", fechaApertura=" + fechaApertura +
                 ", saldo=" + saldo +
                 ", tasaInteres=" + tasaInteres +

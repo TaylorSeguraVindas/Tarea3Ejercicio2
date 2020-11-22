@@ -13,6 +13,10 @@ public class GestorCuentas {
         return cuentaFAO.guardarNuevaCuenta(nuevocuenta);
     }
 
+    public boolean modificarCuenta(Cuenta pCuenta) {
+        return cuentaFAO.modificarCuenta(pCuenta);
+    }
+
     public List<Cuenta> listarCuentas() {
         return cuentaFAO.listarTodas();
     }
