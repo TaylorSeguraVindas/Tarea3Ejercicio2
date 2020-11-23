@@ -40,7 +40,7 @@ public class Controlador {
         do {
             opcion = mostrarMenu();
             procesarOpcion(opcion);
-        } while (opcion != 7);
+        } while (opcion != 8);
     }
 
     /**
@@ -53,9 +53,10 @@ public class Controlador {
         ui.imprimirLinea("2. Listar clientes");
         ui.imprimirLinea("3. Registrar cuenta");
         ui.imprimirLinea("4. Listar cuentas");
-        ui.imprimirLinea("5. Realizar movimiento");
-        ui.imprimirLinea("6. Listar movimientos");
-        ui.imprimirLinea("7. Salir");
+        ui.imprimirLinea("5. Buscar cuenta");
+        ui.imprimirLinea("6. Realizar movimiento");
+        ui.imprimirLinea("7. Listar movimientos");
+        ui.imprimirLinea("8. Salir");
         ui.imprimir("Su opcion: ");
         int opcion = ui.leerEntero();
         return opcion;
@@ -80,12 +81,15 @@ public class Controlador {
                 listarCuentas();
                 break;
             case 5:
-                registrarMovimiento();
+                buscarCuenta();
                 break;
             case 6:
-                listarMovimientos();
+                registrarMovimiento();
                 break;
             case 7:
+                listarMovimientos();
+                break;
+            case 8:
                 ui.imprimirLinea("Adios");
                 break;
             default:
@@ -218,6 +222,19 @@ public class Controlador {
         }
     }
 
+    /**
+     * Metodo usado para buscar una cuenta
+     */
+    private void buscarCuenta() {
+        ui.imprimirLinea("Ingrese el id de la cuenta: ");
+        String idCuenta = ui.leerLinea();
+
+        Optional<Cuenta> cuentaEncontrada = gestorCuentas.buscarPorId(idCuenta);
+
+        if(cuentaEncontrada.isPresent()) {
+            ui.imprimirLinea(cuentaEncontrada.get().toString());
+        }
+    }
     /**
      * Metodo usado para registrar movimientos
      */
