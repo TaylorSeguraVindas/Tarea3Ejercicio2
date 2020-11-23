@@ -15,11 +15,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * La clase FAO se encarga de toda la lógica de acceso a los archivos ya sea para lectura o escritura
+ *
+ * @author Taylor Segura Vindas
+ * @version 1.0
+ * @since 2020-11-22
+ */
 public class CuentaFAO {
     private final String directorioCuentas = "c:\\dev\\Cuentas.csv";
 
     private ClienteFAO clienteFAO = new ClienteFAO();
 
+    /**
+     * Metodo para guardar una nueva Cuenta en el archivo
+     * @param nuevoCuenta instancia de la clase Cuenta que será almacenada
+     * @return true si se realiza correctamente, false si ocurre un error
+     * @see Cuenta
+     */
     public boolean guardarNuevaCuenta(Cuenta nuevoCuenta) {
         boolean idRepetido = buscarPorId(nuevoCuenta.getNumeroCuenta()).isPresent();
 
@@ -38,6 +51,12 @@ public class CuentaFAO {
         return false;
     }
 
+    /**
+     * Metodo para modificar una nueva Cuenta en el archivo
+     * @param cuentaModificar instancia de la clase Cuenta que será modificada
+     * @return true si se realiza correctamente, false si ocurre un error
+     * @see Cuenta
+     */
     public boolean modificarCuenta(Cuenta cuentaModificar) {
         ArrayList<String> result = new ArrayList<>();
         BufferedReader reader;
@@ -87,6 +106,11 @@ public class CuentaFAO {
         return false;
     }
 
+    /**
+     * Metodo usado para leer todas las cuentas almacenadas
+     * @return lista con instancias de la clase Cuenta
+     * @see Cuenta
+     */
     public List<Cuenta> listarTodas() {
         ArrayList<Cuenta> result = new ArrayList<>();
         BufferedReader reader;
@@ -113,34 +137,12 @@ public class CuentaFAO {
         return result;
     }
 
-    public List<Cuenta> listarPorTipo(EnumTipoCuenta tipo) {
-        ArrayList<Cuenta> result = new ArrayList<>();
-        BufferedReader reader;
-
-        File archivoCuentas = new File(directorioCuentas);
-        if(archivoCuentas.exists()) {
-            try {
-                reader = new BufferedReader(new FileReader(directorioCuentas));
-                String currentLine = reader.readLine();
-                while (currentLine != null) {
-                    String[] datos = currentLine.split(",");
-                    //Filtrar por tipo.
-                    if (EnumTipoCuenta.valueOf(datos[0]).equals(tipo)) {
-                        result.add(leerCuentaCSV(datos));
-                    }
-
-                    currentLine = reader.readLine();
-                }
-
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return result;
-    }
-
+    /**
+     * Metodo usado para buscar una Cuenta usando como filtro el id especificado
+     * @param id identificador de la Cuenta que se busca
+     * @return instancia de la clase Cuenta que coincide con el identificador enviado
+     * @see Cuenta
+     */
     public Optional<Cuenta> buscarPorId(String id) {
         BufferedReader reader;
 
@@ -167,6 +169,12 @@ public class CuentaFAO {
         return Optional.empty();
     }
 
+    /**
+     * Metodo para crear instancias de la clase Cuenta usando datos leidos de un archivo
+     * @param datosLinea arreglo de String con los datos necesarios para inicializar la clase
+     * @return una instancia de la clase Cuenta
+     * @see Cuenta
+     */
     private Cuenta leerCuentaCSV(String[] datosLinea) {
         EnumTipoCuenta tipoCuenta = EnumTipoCuenta.valueOf(datosLinea[0]);    //El primer atributo siempre define el tipo de Cuenta
 

@@ -9,10 +9,17 @@ import segura.taylor.bl.gestor.GestorMovimientos;
 import segura.taylor.ui.UI;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * La clase Controlador se usa para realizar la comunicación entre
+ * el UI y los Gestores
+ *
+ * @author Taylor Segura Vindas
+ * @version 1.0
+ * @since 2020-11-22
+ */
 public class Controlador {
     GestorClientes gestorClientes = new GestorClientes();
     GestorCuentas gestorCuentas = new GestorCuentas();
@@ -20,6 +27,9 @@ public class Controlador {
 
     UI ui = new UI();
 
+    /**
+     * Metodo usado para iniciar la ejecucion del programa
+     */
     public void iniciarPrograma() {
         //Pruebas
         //pruebaGuardarMateriales();
@@ -33,6 +43,10 @@ public class Controlador {
         } while (opcion != 7);
     }
 
+    /**
+     * Metodo usado para obtener la accion que desea realizar el usuario
+     * @return la opcion seleccionada por el usuario
+     */
     private int mostrarMenu() {
         ui.imprimirLinea("Bienvenido, seleccione una opción");
         ui.imprimirLinea("1. Registrar cliente");
@@ -47,6 +61,10 @@ public class Controlador {
         return opcion;
     }
 
+    /**
+     * Metodo usado para determinar la siguiente accion que debe realizar el programa
+     * @param opcion entero que define la siguiente accion del programa
+     */
     private void procesarOpcion(int opcion) {
         switch (opcion) {
             case 1:
@@ -76,6 +94,9 @@ public class Controlador {
         }
     }
 
+    /**
+     * Metodo usado para registar clientes
+     */
     private void registrarCliente() {
         ui.imprimirLinea("Id: ");
         String id = ui.leerLinea();
@@ -92,6 +113,10 @@ public class Controlador {
             ui.imprimirLinea("Ya existe un cliente con el id especificado");
         }
     }
+
+    /**
+     * Metodo usado para listar clientes
+     */
     private void listarClientes() {
         List<Cliente> clientes = gestorClientes.listarClientes();
 
@@ -100,6 +125,9 @@ public class Controlador {
         }
     }
 
+    /**
+     * Metodo usado para registrar cuenta
+     */
     private void registrarCuenta() {
         boolean resultado = false;
 
@@ -178,6 +206,10 @@ public class Controlador {
             ui.imprimirLinea("Ocurrió un error al registrar la cuenta");
         }
     }
+
+    /**
+     * Metodo usado para listar cuentas
+     */
     private void listarCuentas() {
         List<Cuenta> cuentas = gestorCuentas.listarCuentas();
 
@@ -186,6 +218,9 @@ public class Controlador {
         }
     }
 
+    /**
+     * Metodo usado para registrar movimientos
+     */
     //Normal
     private void registrarMovimiento() {
         //Cuenta
@@ -258,6 +293,11 @@ public class Controlador {
             ui.imprimirLinea("No se puede realizar el movimiento");
         }
     }
+
+    /**
+     * Metodo usado para registrar el primer movimiento de la cuenta
+     * @param cuentaModificar
+     */
     //Primer movimiento cuenta corriente
     private void registrarMovimiento(Cuenta cuentaModificar) {
         ui.imprimirLinea("Deposito inicial. Debe ser 50mil colones.");
@@ -298,6 +338,10 @@ public class Controlador {
             ui.imprimirLinea("No se puede realizar el movimiento");
         }
     }
+
+    /**
+     * Metodo usado para listar movimientos
+     */
     private void listarMovimientos() {
         List<Movimiento> movimientos = gestorMovimientos.listarMovimientos();
         for (Movimiento movimiento : movimientos) {

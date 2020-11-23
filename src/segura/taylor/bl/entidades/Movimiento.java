@@ -59,6 +59,10 @@ public class Movimiento implements SerializableCSV {
 
     //Constructores
     public Movimiento(){}
+    /**
+     * Metodo constructor usado para crear una instancia basada en texto
+     * @param datos array de String con los datos necesarios para crear la instancia
+     */
     public Movimiento(String[] datos){
         this.id = datos[0];
         this.tipo = EnumTipoMovimiento.valueOf(datos[1]);
@@ -66,6 +70,18 @@ public class Movimiento implements SerializableCSV {
         this.descripcion = datos[3];
         this.monto = Double.parseDouble(datos[4]);
     }
+
+    /**
+     * Metodo constructor
+     * @param id String que define el id
+     * @param tipo valor de EnumTipoMovimiento que define el tipo de movimiento
+     * @param fecha LocalDate que define la fecha de realización
+     * @param descripcion String que define la descripcion
+     * @param monto double que define el monto
+     * @param cuentaModificada instancia de la clase Cuenta que define la cuenta que se va a modificar
+     * @see EnumTipoMovimiento
+     * @see Cuenta
+     */
     public Movimiento(String id, EnumTipoMovimiento tipo, LocalDate fecha, String descripcion, double monto, Cuenta cuentaModificada) {
         this.id = id;
         this.tipo = tipo;

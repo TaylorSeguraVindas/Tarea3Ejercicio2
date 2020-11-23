@@ -32,11 +32,22 @@ public class Cliente implements SerializableCSV {
 
     //Constructores
     public Cliente(){}
+    /**
+     * Metodo constructor usado para crear una instancia basada en texto
+     * @param datos array de String con los datos necesarios para crear la instancia
+     */
     public Cliente(String[] datos){
         this.id = datos[0];
         this.nombre = datos[1];
         this.direccion = datos[2];
     }
+
+    /**
+     * Metodo constructor
+     * @param id String que define el id
+     * @param nombre String que define el nombre
+     * @param direccion String que define la direccion
+     */
     public Cliente(String id, String nombre, String direccion) {
         this.id = id;
         this.nombre = nombre;

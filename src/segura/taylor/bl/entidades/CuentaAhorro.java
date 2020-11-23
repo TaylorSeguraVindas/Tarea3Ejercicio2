@@ -4,7 +4,6 @@ import segura.taylor.bl.enums.EnumTipoCuenta;
 import segura.taylor.bl.enums.EnumTipoMovimiento;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 public class CuentaAhorro extends Cuenta{
     //Constantes
@@ -19,6 +18,10 @@ public class CuentaAhorro extends Cuenta{
         this.tipoCuenta = EnumTipoCuenta.AHORRO;
         this.tasaInteres = CuentaAhorro.constTasaIntereses;
     }
+    /**
+     * Metodo constructor usado para crear una instancia basada en texto
+     * @param datos array de String con los datos necesarios para crear la instancia
+     */
     public CuentaAhorro(String[] datos){
         this.tipoCuenta = EnumTipoCuenta.AHORRO;
         this.numeroCuenta = datos[1];
@@ -27,6 +30,15 @@ public class CuentaAhorro extends Cuenta{
 
         this.tasaInteres = CuentaAhorro.constTasaIntereses;
     }
+
+    /**
+     * Metodo constructor
+     * @param numeroCuenta String que define el numero de cuenta
+     * @param fechaApertura LocalDate que define la fecha de apertura
+     * @param saldo double que define el saldo
+     * @param duenno instancia de la clase Cliente que define al dueño
+     * @see Cliente
+     */
     public CuentaAhorro(String numeroCuenta, LocalDate fechaApertura, double saldo, Cliente duenno) {
         super(numeroCuenta, fechaApertura, saldo, CuentaAhorro.constTasaIntereses, duenno);
         this.tipoCuenta = EnumTipoCuenta.AHORRO;
@@ -44,6 +56,12 @@ public class CuentaAhorro extends Cuenta{
                 '}';
     }
 
+    /**
+     * Metodo usado para determinar si un movimiento se puede realizar o no
+     * @param pMovimiento instancia de la clase Movimiento que define los cambios que se harán a la cuenta
+     * @return true si se puede hacer el movimiento, false si no se puede
+     * @see Movimiento
+     */
     @Override
     public boolean puedeRealizarMovimiento(Movimiento pMovimiento) {
         if(pMovimiento.getTipo().equals(EnumTipoMovimiento.RETIRO)) {

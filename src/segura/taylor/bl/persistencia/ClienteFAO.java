@@ -3,7 +3,6 @@ package segura.taylor.bl.persistencia;
 import segura.taylor.bl.entidades.Cliente;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -12,9 +11,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * La clase FAO se encarga de toda la lógica de acceso a los archivos ya sea para lectura o escritura
+ *
+ * @author Taylor Segura Vindas
+ * @version 1.0
+ * @since 2020-11-22
+ */
 public class ClienteFAO {
     private final String directorioClientes = "c:\\dev\\Clientes.csv";
 
+    /**
+     * Metodo para guardar un nuevo Cliente en el archivo
+     * @param nuevoCliente instancia de la clase Cliente que será almacenado
+     * @return true si se realiza correctamente, false si ocurre un error
+     * @see Cliente
+     */
     public boolean guardarNuevoCliente(Cliente nuevoCliente) {
         boolean idRepetido = buscarPorId(nuevoCliente.getId()).isPresent();
 
@@ -33,6 +45,11 @@ public class ClienteFAO {
         return false;
     }
 
+    /**
+     * Metodo usado para leer todos los clientes almacenados
+     * @return lista con instancias de la clase Cliente
+     * @see Cliente
+     */
     public List<Cliente> listarTodos() {
         ArrayList<Cliente> result = new ArrayList<>();
         BufferedReader reader;
@@ -59,6 +76,12 @@ public class ClienteFAO {
         return result;
     }
 
+    /**
+     * Metodo usado para buscar un cliente usando como filtro el id especificado
+     * @param id identificador del cliente que se busca
+     * @return instancia de la clase Cliente que coincide con el identificador enviado
+     * @see Cliente
+     */
     public Optional<Cliente> buscarPorId(String id) {
         BufferedReader reader;
 
@@ -85,6 +108,12 @@ public class ClienteFAO {
         return Optional.empty();
     }
 
+    /**
+     * Metodo para crear instancias de la clase Cliente usando datos leidos de un archivo
+     * @param datosLinea arreglo de String con los datos necesarios para inicializar la clase
+     * @return una instancia de la clase Cliente
+     * @see Cliente
+     */
     private Cliente leerClienteCSV(String[] datosLinea){
         return new Cliente(datosLinea);
     }

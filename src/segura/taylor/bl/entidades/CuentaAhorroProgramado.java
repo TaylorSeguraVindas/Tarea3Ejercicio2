@@ -5,7 +5,6 @@ import segura.taylor.bl.enums.EnumTipoMovimiento;
 
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.ArrayList;
 
 public class CuentaAhorroProgramado extends Cuenta{
     //Constantes
@@ -35,6 +34,10 @@ public class CuentaAhorroProgramado extends Cuenta{
     public CuentaAhorroProgramado() {
         this.tipoCuenta = EnumTipoCuenta.AHORRO_PROGRAMADO;
     }
+    /**
+     * Metodo constructor usado para crear una instancia basada en texto
+     * @param datos array de String con los datos necesarios para crear la instancia
+     */
     public CuentaAhorroProgramado(String[] datos) {
         this.tipoCuenta = EnumTipoCuenta.AHORRO_PROGRAMADO;
         this.numeroCuenta = datos[1];
@@ -42,6 +45,18 @@ public class CuentaAhorroProgramado extends Cuenta{
         this.saldo = Double.parseDouble(datos[3]);
         this.montoDebito = Double.parseDouble((datos[4]));
     }
+
+    /**
+     * Metodo constructor
+     * @param numeroCuenta String que define el numero de cuenta
+     * @param fechaApertura LocalDate que define la fecha de apertura
+     * @param saldo double que define el saldo
+     * @param montoDebito double que define el monto que se debe extraer de la cuenta relacionada
+     * @param duenno instancia de la clase Cliente que define al dueño
+     * @param cuentaCorriente instancia de la clase Cuenta que define la cuenta corriente relacionada
+     * @see Cliente
+     * @see CuentaCorriente
+     */
     public CuentaAhorroProgramado(String numeroCuenta, LocalDate fechaApertura, double saldo, double montoDebito, Cliente duenno, CuentaCorriente cuentaCorriente) {
         super(numeroCuenta, fechaApertura, saldo, CuentaAhorroProgramado.constTasaIntereses, duenno);
         this.tipoCuenta = EnumTipoCuenta.AHORRO_PROGRAMADO;
@@ -64,6 +79,12 @@ public class CuentaAhorroProgramado extends Cuenta{
                 '}';
     }
 
+    /**
+     * Metodo usado para determinar si un movimiento se puede realizar o no
+     * @param pMovimiento instancia de la clase Movimiento que define los cambios que se harán a la cuenta
+     * @return true si se puede hacer el movimiento, false si no se puede
+     * @see Movimiento
+     */
     @Override
     public boolean puedeRealizarMovimiento(Movimiento pMovimiento) {
         if(pMovimiento.getTipo().equals(EnumTipoMovimiento.RETIRO)) {
